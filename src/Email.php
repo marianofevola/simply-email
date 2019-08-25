@@ -158,7 +158,7 @@ class Email
     $recipients = $this->to;
     if (is_array($this->to))
     {
-      $recipients = implode(", ", $to);
+      $recipients = implode(", ", $recipients);
     }
 
     $isSent = mail(
