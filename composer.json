@@ -1,0 +1,49 @@
+{
+  "name": "marianofevola/simply-email",
+  "type": "library",
+  "description": "A wrapper for the PHP mail",
+  "keywords": [
+    "mariano fevola",
+    "simply email",
+    "email"
+  ],
+  "homepage": "https://github.com/marianofevola/simply-email",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mariano Fevola",
+      "email": "fev.mariano@gmail.com",
+      "homepage": "https://www.donotstop.it",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php" : "~7.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit" : ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "MFevola\\SimplyEmail\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MFevola\\SimplyEmail\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "check-style": "phpcs src tests",
+    "fix-style": "phpcbf src tests"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
