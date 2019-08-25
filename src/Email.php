@@ -2,7 +2,6 @@
 
 namespace MFevola\SimplyEmail;
 
-use mysql_xdevapi\Exception;
 
 class Email
 {
@@ -39,9 +38,9 @@ class Email
     $this->to      = array_key_exists("to",$config) ? $config["to"] : "";
     $this->replyTo = array_key_exists("replyTo",$config) ? $config["replyTo"] : "";;
     $this->isHtml  = array_key_exists("isHtml",$config) ? $config["isHtml"] : false;
+    $this->subject = array_key_exists("isHtml",$config) ? $config["isHtml"] : "";;
     $this->headers = "";
     $this->message = "";
-    $this->subject = "";
   }
 
   /**
@@ -122,20 +121,20 @@ class Email
   {
     if (empty($this->message))
     {
-      throw new Exception("Missing \"message\" value");
+      throw new \Exception("Missing \"message\" value");
     }
     if (empty($this->subject))
     {
-      throw new Exception("Missing \"subject\" value");
+      throw new \Exception("Missing \"subject\" value");
     }
     if (empty($this->to))
     {
-      throw new Exception("Missing \"recipient\" value");
+      throw new \Exception("Missing \"recipient\" value");
     }
 
     if (empty($this->from))
     {
-      throw new Exception("Missing \"from\" value");
+      throw new \Exception("Missing \"from\" value");
     }
 
     // It's very important not adding spaces in $headers
@@ -156,8 +155,14 @@ class Email
       $this->headers .= "Reply-To: ". strip_tags($this->replyTo) . "\r\n";
     }
 
+    $recipients = $this->to;
+    if (is_array($this->to))
+    {
+      $recipients = implode(", ", $to);
+    }
+
     $isSent = mail(
-      $this->to,
+      $recipients,
       $this->subject,
       $this->message,
       $this->headers
