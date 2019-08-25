@@ -2,7 +2,10 @@
 
 namespace MFevola\SimplyEmail;
 
-
+/**
+ * Class Email
+ * @package MFevola\SimplyEmail
+ */
 class Email
 {
   /** @var Config */
@@ -29,16 +32,21 @@ class Email
   /** @var string */
   private $replyTo;
 
-  // TODO
-  //$headers .= "CC: susan@example.com\r\n";
+  /** @var string */
+  private $cc;
+
+  /**
+   * Email constructor.
+   */
   public function __construct()
   {
     $config= (new Config())->getData();
-    $this->from    = array_key_exists("from",$config) ? $config["from"] : "";
-    $this->to      = array_key_exists("to",$config) ? $config["to"] : "";
-    $this->replyTo = array_key_exists("replyTo",$config) ? $config["replyTo"] : "";;
-    $this->isHtml  = array_key_exists("isHtml",$config) ? $config["isHtml"] : false;
-    $this->subject = array_key_exists("isHtml",$config) ? $config["isHtml"] : "";;
+    $this->from    = array_key_exists("from", $config) ? $config["from"] : "";
+    $this->to      = array_key_exists("to", $config) ? $config["to"] : "";
+    $this->cc      = array_key_exists("cc", $config) ? $config["cc"] : "";;
+    $this->replyTo = array_key_exists("replyTo", $config) ? $config["replyTo"] : "";;
+    $this->isHtml  = array_key_exists("isHtml", $config) ? $config["isHtml"] : false;
+    $this->subject = array_key_exists("subject", $config) ? $config["subject"] : "";;
     $this->headers = "";
     $this->message = "";
   }
@@ -155,8 +163,19 @@ class Email
       $this->headers .= "Reply-To: ". strip_tags($this->replyTo) . "\r\n";
     }
 
+    $carbonCopy = $this->cc;
+    if (is_array($carbonCopy))
+    {
+      $carbonCopy = implode(", ", $carbonCopy);
+    }
+
+    if (!empty($this->cc))
+    {
+      $this->headers .= "CC: ". $this->cc . "\r\n";
+    }
+
     $recipients = $this->to;
-    if (is_array($this->to))
+    if (is_array($recipients))
     {
       $recipients = implode(", ", $recipients);
     }
