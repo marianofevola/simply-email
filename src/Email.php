@@ -2,8 +2,12 @@
 
 namespace MFevola\SimplyEmail;
 
+use mysql_xdevapi\Exception;
+
 class Email
 {
+  /** @var Config */
+  private $config;
 
   /** @var string  */
   private $message;
@@ -30,13 +34,14 @@ class Email
   //$headers .= "CC: susan@example.com\r\n";
   public function __construct()
   {
+    $config= (new Config())->getData();
+    $this->from    = array_key_exists("from",$config) ? $config["from"] : "";
+    $this->to      = array_key_exists("to",$config) ? $config["to"] : "";
+    $this->replyTo = array_key_exists("replyTo",$config) ? $config["replyTo"] : "";;
+    $this->isHtml  = array_key_exists("isHtml",$config) ? $config["isHtml"] : false;
+    $this->headers = "";
     $this->message = "";
     $this->subject = "";
-    $this->from    = "";
-    $this->to      = "";
-    $this->headers = "";
-    $this->isHtml  = true;
-    $this->replyTo = "";
   }
 
   /**
@@ -115,29 +120,30 @@ class Email
 
   public function send()
   {
-    if (!$this->message)
+    if (empty($this->message))
     {
-      throw new \Exception("Mail message not set");
+      throw new Exception("Missing \"message\" value");
     }
-    if (!$this->subject)
+    if (empty($this->subject))
     {
-      throw new \Exception("Subject message not set");
+      throw new Exception("Missing \"subject\" value");
     }
-    if (!$this->to)
+    if (empty($this->to))
     {
-      throw new \Exception("Recipient not set");
+      throw new Exception("Missing \"recipient\" value");
     }
 
-    // Default from
-    // TODO grab from config
-    $from = "Johnny <jhonny@dep.com>";
-    if (!empty($this->from))
+    if (empty($this->from))
     {
-      $from = $this->from;
+      throw new Exception("Missing \"from\" value");
     }
 
     // It's very important not adding spaces in $headers
-    $this->headers = "From: {$from}\r\n". "X-Mailer: php";
+    $this->headers = sprintf(
+      "From: %s\r\n%s",
+      $this->from,
+      "X-Mailer: php"
+    );
 
     if ($this->isHtml)
     {
@@ -162,7 +168,5 @@ class Email
       throw new \Exception("Unable to send email!");
     }
   }
-
-
 
 }
