@@ -140,11 +140,6 @@ class Email
       throw new \Exception("Missing \"recipient\" value");
     }
 
-    if (empty($this->from))
-    {
-      throw new \Exception("Missing \"from\" value");
-    }
-
     // It's very important not adding spaces in $headers
     $this->headers = sprintf(
       "From: %s\r\n%s",
