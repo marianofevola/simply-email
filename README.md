@@ -5,7 +5,7 @@ your default values for the emails.
 Example:
 
 ```yaml
-from: "Johnny <jhonny@dep.com>"
+from: "Johnny <jhonny@depp.com>"
 isHtml: true
 
 ```
